@@ -1,0 +1,8 @@
+D:/VS/welfare/out/build/x64-debug/CMakeFiles/edit_cache.dir
+D:/VS/welfare/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
+D:/VS/welfare/out/build/x64-debug/welfare/CMakeFiles/welfare.dir
+D:/VS/welfare/out/build/x64-debug/welfare/CMakeFiles/edit_cache.dir
+D:/VS/welfare/out/build/x64-debug/welfare/CMakeFiles/rebuild_cache.dir
+D:/VS/welfare/out/build/x64-debug/welfare/sqlite3/CMakeFiles/sqlite3.dir
+D:/VS/welfare/out/build/x64-debug/welfare/sqlite3/CMakeFiles/edit_cache.dir
+D:/VS/welfare/out/build/x64-debug/welfare/sqlite3/CMakeFiles/rebuild_cache.dir

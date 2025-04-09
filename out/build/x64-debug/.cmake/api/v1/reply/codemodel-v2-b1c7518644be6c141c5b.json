@@ -1,0 +1,104 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "welfare",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-welfare-Debug-6297e74255f0a55d1dff.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "welfare",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "welfare/sqlite3",
+					"jsonFile" : "directory-welfare.sqlite3-Debug-e6a8ce7370cdd4bdee1d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "welfare/sqlite3",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "welfare",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "sqlite3::@64a0fdf5d1d12d2f820a",
+					"jsonFile" : "target-sqlite3-Debug-33ee89fae89b0da9c4e3.json",
+					"name" : "sqlite3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "welfare::@e0440b32dfcd45d8ba66",
+					"jsonFile" : "target-welfare-Debug-94b601ece2de57826684.json",
+					"name" : "welfare",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/VS/welfare/out/build/x64-debug",
+		"source" : "D:/VS/welfare"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

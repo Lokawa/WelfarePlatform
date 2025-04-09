@@ -1,0 +1,5 @@
+# ninja log v6
+6	699	7658267941800298	welfare/sqlite3/CMakeFiles/sqlite3.dir/sqlite3.c.obj	faf04f976a475d53
+700	760	7658267948740216	welfare/sqlite3/sqlite3.lib	1283df9bcdc404a9
+10	5413	7658267941839490	welfare/CMakeFiles/welfare.dir/welfare.cpp.obj	5446be430806bfaa
+5422	5808	7658267995964917	welfare/welfare.exe	dd08c77e2d0fb085
