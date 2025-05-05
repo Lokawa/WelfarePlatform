@@ -38,7 +38,7 @@ public:
 		this->sql_path = sql_path;
 	}
 	~WelfareDAO() {}
-	void WelfareAdd(std::string name, std::string description, int type)
+	void WelfareAdd(std::string name, std::string description, int type,std::vector<std::string> image_urls)
 	{
 		sqlite3* db;
 
@@ -56,6 +56,30 @@ public:
 		{
 			std::cerr << "SQL error: " << errMsg << std::endl;
 			sqlite3_free(errMsg);
+			sqlite3_close(db);
+			return;
+		}
+
+		int id = sqlite3_last_insert_rowid(db);
+		for (const auto& image_url : image_urls)
+		{
+			std::string sql = "INSERT INTO welfare_image (welfare_id, image_url) VALUES (?, ?);";
+			sqlite3_stmt* stmt;
+			rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
+			if (rc != SQLITE_OK)
+			{
+				std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+				sqlite3_close(db);
+				return;
+			}
+			sqlite3_bind_int(stmt, 1, id);
+			sqlite3_bind_text(stmt, 2, image_url.c_str(), -1, SQLITE_STATIC);
+			rc = sqlite3_step(stmt);
+			if (rc != SQLITE_DONE)
+			{
+				std::cerr << "Execution failed: " << sqlite3_errmsg(db) << std::endl;
+			}
+			sqlite3_finalize(stmt);
 		}
 		sqlite3_close(db);
 	}
@@ -99,6 +123,28 @@ public:
 		}
 		sqlite3_close(db);
 		return welfare;
+	}
+	vector<std::string> Get_welfare_image(int id)
+	{
+		sqlite3* db;
+		int rc = sqlite3_open(sql_path.c_str(), &db);
+		if (rc)
+		{
+			std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+			return vector<std::string>();
+		}
+		std::string sql = "SELECT image_url FROM welfare_image WHERE welfare_id = " + std::to_string(id) + ";";
+		char* errMsg = 0;
+		vector<std::string> image_urls;
+		rc = sqlite3_exec(db, sql.c_str(), callback_list, &image_urls, &errMsg);
+		if (rc != SQLITE_OK)
+		{
+			std::cerr << "SQL error: " << errMsg << std::endl;
+			sqlite3_free(errMsg);
+			return vector<std::string>();
+		}
+		sqlite3_close(db);
+		return image_urls;
 	}
 	vector<Welfare> SearchWelfare(int type)
 	{
@@ -144,7 +190,7 @@ public:
 		sqlite3_close(db);
 		return welfare_list;
 	}
-	void WelfareModify(std::string name, string description, int type)
+	void WelfareModify(std::string name, string description, int type, const std::vector<std::string>& image_urls)
 	{
 		sqlite3* db;
 		int rc = sqlite3_open(sql_path.c_str(), &db);
@@ -160,7 +206,88 @@ public:
 		{
 			std::cerr << "SQL error: " << errMsg << std::endl;
 			sqlite3_free(errMsg);
+			sqlite3_close(db);
+			return;
+		}
+		
+		//get ID
+		int welfare_id;
+		sql = "SELECT id FROM welfare WHERE name = '" + name + "';";
+		sqlite3_stmt* stmt;
+		rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+		if (rc != SQLITE_OK) {
+			std::cerr << "SQL error (prepare select welfare_id): " << errMsg << std::endl;
+			sqlite3_free(errMsg);
+			sqlite3_close(db);
+			return;
+		}
+
+		rc = sqlite3_step(stmt);
+		if (rc == SQLITE_ROW) {
+			welfare_id = sqlite3_column_int(stmt, 0);  // 获取 welfare_id
+		}
+		else {
+			std::cerr << "No welfare found with name: " << name << std::endl;
+			sqlite3_finalize(stmt);
+			sqlite3_close(db);
+			return;
+		}
+		sqlite3_finalize(stmt);
+
+		// 删除旧的图片记录
+		sql = "DELETE FROM welfare_image WHERE welfare_id = " + std::to_string(welfare_id) + ";";
+		rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
+		if (rc != SQLITE_OK)
+		{
+			std::cerr << "SQL error: " << errMsg << std::endl;
+			sqlite3_free(errMsg);
+			sqlite3_close(db);
+			return;
+		}
+
+		// 重新插入图片
+		for (const auto& image_url : image_urls)
+		{
+			std::string sql = "INSERT INTO welfare_image (welfare_id, image_url) VALUES (?, ?);";
+			sqlite3_stmt* stmt;
+			rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
+			if (rc != SQLITE_OK)
+			{
+				std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+				sqlite3_close(db);
+				return;
+			}
+			sqlite3_bind_int(stmt, 1, welfare_id);
+			sqlite3_bind_text(stmt, 2, image_url.c_str(), -1, SQLITE_STATIC);
+			rc = sqlite3_step(stmt);
+			if (rc != SQLITE_DONE)
+			{
+				std::cerr << "Execution failed: " << sqlite3_errmsg(db) << std::endl;
+			}
+			sqlite3_finalize(stmt);
+		}
+
+
+		sqlite3_close(db);
+	}
+	void WelfareVisit(int id)
+	{
+		sqlite3* db;
+		int rc = sqlite3_open(sql_path.c_str(), &db);
+		if (rc)
+		{
+			std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+			return;
+		}
+		std::string sql = "UPDATE welfare SET frequency = frequency + 1 WHERE id = " + std::to_string(id) + ";";
+		char* errMsg = 0;
+		rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
+		if (rc != SQLITE_OK)
+		{
+			std::cerr << "SQL error: " << errMsg << std::endl;
+			sqlite3_free(errMsg);
 		}
 		sqlite3_close(db);
 	}
+
 };

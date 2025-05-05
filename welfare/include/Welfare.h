@@ -9,8 +9,9 @@ public:
 	int id;
 	std::string name;
 	std::string description;
+	int frequency = 0;
 	int type;//deposit_offers = 0,	loan_discounts = 1,		credit_card_benefits = 2
-	~Welfare() = default;
+	~Welfare() = default;   
 	Welfare(std::string name, std::string description, int type)
 		: name(name), description(description), type(type) {
 	}
