@@ -17,6 +17,9 @@ int main()
 	UserService userService;
 	userService.route(app);
 
+	WelfareService welfareService;
+	welfareService.route(app);
+
 	app.port(18080).multithreaded().run();
 	return 0;
 }
