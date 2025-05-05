@@ -63,7 +63,7 @@ public:
 		int id = sqlite3_last_insert_rowid(db);
 		for (const auto& image_url : image_urls)
 		{
-			std::string sql = "INSERT INTO welfare_image (welfare_id, image_url) VALUES (?, ?);";
+			std::string sql = "INSERT INTO welfare_images (welfare_id, image_url) VALUES (?, ?);";
 			sqlite3_stmt* stmt;
 			rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
 			if (rc != SQLITE_OK)
@@ -133,7 +133,7 @@ public:
 			std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
 			return vector<std::string>();
 		}
-		std::string sql = "SELECT image_url FROM welfare_image WHERE welfare_id = " + std::to_string(id) + ";";
+		std::string sql = "SELECT image_url FROM welfare_images WHERE welfare_id = " + std::to_string(id) + ";";
 		char* errMsg = 0;
 		vector<std::string> image_urls;
 		rc = sqlite3_exec(db, sql.c_str(), callback_list, &image_urls, &errMsg);
@@ -235,7 +235,7 @@ public:
 		sqlite3_finalize(stmt);
 
 		// É¾³ý¾ÉµÄÍ¼Æ¬¼ÇÂ¼
-		sql = "DELETE FROM welfare_image WHERE welfare_id = " + std::to_string(welfare_id) + ";";
+		sql = "DELETE FROM welfare_images WHERE welfare_id = " + std::to_string(welfare_id) + ";";
 		rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
 		if (rc != SQLITE_OK)
 		{
@@ -248,7 +248,7 @@ public:
 		// ÖØÐÂ²åÈëÍ¼Æ¬
 		for (const auto& image_url : image_urls)
 		{
-			std::string sql = "INSERT INTO welfare_image (welfare_id, image_url) VALUES (?, ?);";
+			std::string sql = "INSERT INTO welfare_images (welfare_id, image_url) VALUES (?, ?);";
 			sqlite3_stmt* stmt;
 			rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
 			if (rc != SQLITE_OK)
